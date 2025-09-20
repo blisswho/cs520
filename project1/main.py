@@ -84,6 +84,8 @@ def main():
     ship_layout = generate_ship_layout(grid)
     print_maze(ship_layout)
 
+    # TODO: Add soln code
+
 
 if __name__ == "__main__":
     main()
