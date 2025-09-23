@@ -1,13 +1,13 @@
 from typing import List, Optional, Tuple
 
-from nebulist import move
-from nebulist.types import Cell, Action
-from nebulist.grid import has_one_open_neighbor, reached_single_robot_space
+from nebulist.setup import move
+from nebulist.setup.types import Cell, Action
+from nebulist.setup.grid import has_one_open_neighbor, reached_single_robot_space
 import random
 
 import heapq
 
-from nebulist.utils import inbounds
+from nebulist.setup.utils import inbounds
 
 
 class AStarSolver:

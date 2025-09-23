@@ -1,12 +1,12 @@
 import sys, random
-from nebulist.types import Action
-from nebulist.grid import (
+from nebulist.setup.types import Action
+from nebulist.setup.grid import (
     generate_grid,
     fill_open_with_robot,
     generate_ship_layout,
 )
-from nebulist.move import move
-from nebulist.io import print_maze
+from nebulist.setup.move import move
+from nebulist.setup.io import print_maze
 
 
 def main() -> None:
