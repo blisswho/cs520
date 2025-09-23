@@ -8,19 +8,6 @@ def generate_grid(d: int) -> List[List[Cell]]:
     return [[Cell.BLOCKED for _ in range(d)] for _ in range(d)]
 
 
-def set_random_goal_cell(grid: List[List[Cell]]) -> tuple[int, int]:
-    open_cells = [
-        (r, c)
-        for r in range(len(grid))
-        for c in range(len(grid[0]))
-        if grid[r][c] is Cell.OPEN
-    ]
-    if not open_cells:
-        raise RuntimeError("No open cells available to set as goal.")
-    r, c = random.choice(open_cells)
-    return (r, c)
-
-
 def fill_open_with_robot(grid: List[List[Cell]]) -> None:
     for r in range(len(grid)):
         for c in range(len(grid[0])):
@@ -56,3 +43,13 @@ def generate_ship_layout(grid: List[List[Cell]]) -> List[List[Cell]]:
                 grid[nr][nc] = Cell.OPEN
                 heapq.heappush(pq, (random.random(), (nr, nc)))
     return grid
+
+
+def reached_single_robot_space(grid: List[List[Cell]]) -> bool:
+    robot_count = sum(
+        1
+        for row in grid
+        for cell in row
+        if cell is Cell.ROBOT
+    )
+    return robot_count == 1

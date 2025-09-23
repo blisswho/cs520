@@ -13,7 +13,7 @@ def move(grid: List[List[Cell]], direction: Action) -> None:
     for r in range(rows):
         for c in range(cols):
             cell = orig[r][c]
-            if cell in (Cell.BLOCKED, Cell.GOAL):
+            if cell in (Cell.BLOCKED):
                 continue
 
             pr, pc = r - dy, c - dx
