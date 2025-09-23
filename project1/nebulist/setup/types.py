@@ -12,7 +12,6 @@ class Cell(Enum):
     OPEN = 0
     ROBOT = 1
     BLOCKED = 2
-    GOAL = 3
 
     def __str__(self) -> str:
         if self == Cell.OPEN:
@@ -21,6 +20,4 @@ class Cell(Enum):
             return "R"
         elif self == Cell.BLOCKED:
             return "#"
-        elif self == Cell.GOAL:
-            return "G"
         return str(self.value)

@@ -8,7 +8,7 @@ def generate_grid(d: int) -> List[List[Cell]]:
     return [[Cell.BLOCKED for _ in range(d)] for _ in range(d)]
 
 
-def set_random_goal_cell(grid: List[List[Cell]]) -> None:
+def set_random_goal_cell(grid: List[List[Cell]]) -> tuple[int, int]:
     open_cells = [
         (r, c)
         for r in range(len(grid))
@@ -18,7 +18,7 @@ def set_random_goal_cell(grid: List[List[Cell]]) -> None:
     if not open_cells:
         raise RuntimeError("No open cells available to set as goal.")
     r, c = random.choice(open_cells)
-    grid[r][c] = Cell.GOAL
+    return (r, c)
 
 
 def fill_open_with_robot(grid: List[List[Cell]]) -> None:
