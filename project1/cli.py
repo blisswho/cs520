@@ -2,7 +2,6 @@ import sys, random
 from nebulist.types import Action
 from nebulist.grid import (
     generate_grid,
-    set_random_goal_cell,
     fill_open_with_robot,
     generate_ship_layout,
 )
@@ -23,9 +22,6 @@ def main() -> None:
     generate_ship_layout(grid)
     print_maze(grid)
 
-    print("Setting random goal cell...")
-    set_random_goal_cell(grid)
-    print_maze(grid)
     print("Filling open cells with robot...")
     fill_open_with_robot(grid)
     print_maze(grid)
