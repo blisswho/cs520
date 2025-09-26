@@ -9,7 +9,7 @@ from nebulist.setup.grid import has_one_open_neighbor, reached_single_robot_spac
 from nebulist.setup.utils import inbounds
 
 
-class OptimalitySolver:
+class BfsSolver:
     def __init__(self, grid: List[List[Cell]]):
         self.grid = grid
         self.width = len(grid[0])

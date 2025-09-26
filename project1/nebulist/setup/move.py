@@ -1,5 +1,5 @@
 from typing import List
-from .types import Cell, Action
+from nebulist.setup.types import Cell, Action
 
 
 def move(grid: List[List[Cell]], direction: Action) -> None:
@@ -13,7 +13,7 @@ def move(grid: List[List[Cell]], direction: Action) -> None:
     for r in range(rows):
         for c in range(cols):
             cell = orig[r][c]
-            if cell in (Cell.BLOCKED):
+            if cell == Cell.BLOCKED:
                 continue
 
             pr, pc = r - dy, c - dx
@@ -25,3 +25,8 @@ def move(grid: List[List[Cell]], direction: Action) -> None:
             )
 
             grid[r][c] = Cell.ROBOT if (robot_incoming or robot_hit_wall) else Cell.OPEN
+
+
+def do_moves(grid: List[List[Cell]], moves: List[Action]) -> None:
+    for move_action in moves:
+        move(grid, move_action)

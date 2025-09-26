@@ -20,7 +20,7 @@ def has_one_open_neighbor(grid: List[List[Cell]], r: int, c: int) -> bool:
     for action in Action:
         dy, dx = action.value
         nr, nc = r + dy, c + dx
-        if inbounds(grid, nr, nc) and grid[nr][nc] is Cell.OPEN:
+        if inbounds(grid, nr, nc) and grid[nr][nc] in (Cell.OPEN, Cell.ROBOT):
             open_count += 1
     return open_count == 1
 

@@ -1,14 +1,15 @@
 from typing import List, Optional, Tuple
 
-from nebulist.setup import move
+from nebulist.setup.move import move
 from nebulist.setup.types import Cell, Action
 from nebulist.setup.grid import has_one_open_neighbor, reached_single_robot_space
+from nebulist.setup.io import print_maze
 import random
 
 import heapq
 
 from nebulist.setup.utils import inbounds
-
+import time 
 
 class AStarSolver:
     def __init__(self, grid: List[List[Cell]]):
@@ -18,6 +19,10 @@ class AStarSolver:
 
     def search(self) -> Optional[List[Action]]:
         r, c = self.get_random_robot()
+        while (r, c) == self.goal:
+            r, c = self.get_random_robot()
+
+        print(f"Starting A* search from robot at ({r}, {c}) to goal at {self.goal}")
 
         fringe = []
         prev = {(r, c): None}
@@ -31,6 +36,7 @@ class AStarSolver:
             _, (r, c), curr_action = heapq.heappop(fringe)
             location = (r, c)
             curr = (r, c, curr_action)
+            curr_key = (r, c)
 
             # Avoid action on first pop
             if curr_action:
@@ -41,10 +47,12 @@ class AStarSolver:
                 path = []
                 node = curr
                 while node is not None:
-                    _, _, action = node
+                    r, c, action = node
+                    key = (r, c)
                     if action is not None:
                         path.append(action)
-                    node = prev[node]
+                    node = prev[key]
+                # print("PATH: ", path)
                 return list(reversed(path))
 
             # Process fringe for all child actions
@@ -55,18 +63,18 @@ class AStarSolver:
                 if not self.valid_move(next_row, next_col):
                     continue
 
-                child = (next_row, next_col)
-                cost_to_child = dist_from_start[child] + 1
+                child_key = (next_row, next_col)
+                cost_to_child = dist_from_start[curr_key] + 1
                 if (
-                    child not in dist_from_start
-                    or dist_from_start[child] > cost_to_child
+                    child_key not in dist_from_start
+                    or dist_from_start[child_key] > cost_to_child
                 ):
-                    dist_from_start[child] = cost_to_child
-                    prev[child] = curr
+                    dist_from_start[child_key] = cost_to_child
+                    prev[child_key] = curr
                     heuristic = cost_to_child + self.manhattan_distance(
-                        child, self.goal
+                        child_key, self.goal
                     )
-                    heapq.heappush(fringe, (heuristic, child, action))
+                    heapq.heappush(fringe, (heuristic, child_key, action))
 
         return None  # Replace with actual path if found
 
@@ -75,10 +83,23 @@ class AStarSolver:
         # This should return a list of coordinates from start to goal if a path exists
         self.set_random_dead_end_goal()
 
+        print_maze(self.grid)
+
         # Continue to A* search until only one robot space remains
         all_actions = []
         while not reached_single_robot_space(self.grid):
+
+
+                
+            print("\n--- pre grid ---")
+            print_maze(self.grid)
             list_of_actions = self.search()
+            print("LIST OF ACTIONS: ", list_of_actions)
+            print("--- new grid ---")
+            print_maze(self.grid)
+            print("\n")
+            time.sleep(0.5)
+            
             if list_of_actions:
                 all_actions.extend(list_of_actions)
 
@@ -95,11 +116,12 @@ class AStarSolver:
             (r, c)
             for r in range(len(self.grid))
             for c in range(len(self.grid[0]))
-            if self.grid[r][c] is Cell.OPEN and has_one_open_neighbor(self.grid, r, c)
+            if self.grid[r][c] in (Cell.OPEN, Cell.ROBOT) and has_one_open_neighbor(self.grid, r, c)
         ]
         if not dead_ends:
             raise RuntimeError("No dead end cells available to set as goal.")
         r, c = random.choice(dead_ends)
+        print(f"Setting goal at cell ({r}, {c})")
         self.goal = (r, c)
 
     def get_random_robot(self) -> Tuple[int, int]:
